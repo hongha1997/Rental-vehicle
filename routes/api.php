@@ -24,6 +24,12 @@ Route::group(['prefix'=>'v1', 'middleware' => 'cors'], function(){
 	Route::resource('admin/question-frequent', 'Admin\QuestionfrequentController', [
 		'except' => ['create', 'edit']
 	]);
+	Route::resource('admin/contact', 'Admin\ContactController', [
+		'except' => ['create', 'edit']
+	]);
+	Route::resource('admin/news', 'Admin\NewsController', [
+		'except' => ['create', 'edit']
+	]);
 	Route::post('/user/signin', [
 		'uses' => 'AuthController@signin'
 	]);

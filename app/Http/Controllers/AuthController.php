@@ -9,13 +9,6 @@ use JWTAuth;
 use JWTAuthException;
 use Illuminate\Support\Facades\Auth;
 
-
-
-// use Laravel\Lumen\Routing\Controller as BaseController;
-// use Tymon\JWTAuth\JWTAuth;
-
-
-
 class AuthController extends Controller
 {
     public function __construct(JWTAuth $jwt)
