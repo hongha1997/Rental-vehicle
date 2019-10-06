@@ -33,7 +33,7 @@ class UserController extends Controller
         $request->validate(
             [
                 'name' => 'required',
-                'email' => 'required',
+                'email' => 'required|unique:users',
                 'password' => 'required',
                 'picture' => 'required',
                 'number_phone' => 'required',
@@ -42,6 +42,7 @@ class UserController extends Controller
             [
                 'name.required'=>'Yều cầu nhập tên đầy đủ.',
                 'email.required'=>'Yều cầu nhập email.',
+                'email.unique'=>'Email đã bị trùng, vui lòng nhập email khác.',
                 'password.required'=>'Yều cầu nhập password.',
                 'picture.required'=>'Yều cầu chọn ảnh CMND.',
                 'number_phone.required'=>'Yều cầu nhập số điện thoại.',
