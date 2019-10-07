@@ -21,6 +21,9 @@ Route::group(['prefix'=>'v1', 'middleware' => 'cors'], function(){
 	Route::resource('admin/user', 'Admin\UserController', [
 		'except' => ['create', 'edit']
 	]);
+	Route::post('/admin/checkemail/{email}', [
+		'uses' => 'Admin\UserController@checkEmail'
+	]);
 	Route::resource('admin/question-frequent', 'Admin\QuestionfrequentController', [
 		'except' => ['create', 'edit']
 	]);

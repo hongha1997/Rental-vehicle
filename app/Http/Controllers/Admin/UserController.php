@@ -7,10 +7,18 @@ use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Str;
 
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\View;
+
+
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
+
+
 class UserController extends Controller
 {
     public function __construct(){
-        $this->middleware('jwt.auth', ['except' => ['index', 'show']]);
+        $this->middleware('jwt.auth', ['except' => ['index', 'show','checkEmail']]);
     }
     
     public function index()
@@ -27,7 +35,21 @@ class UserController extends Controller
     {
         
     }
-
+    // public function checkEmail(Request $request, $email){
+    //     $users = User::all();
+    //     $email = $email;
+    //     foreach ($users as $key => $value) {
+    //         $haha = $users[$key]->email;
+    //         if($haha == $email) {
+    //             $response = [
+    //                 'error' => 'Email đã bị trùng.'
+    //             ];
+    //             return response()->json($response, 400);
+    //         }
+    //     }
+    //     $response = [];
+    //     return response()->json($response, 200);
+    // }
     public function store(Request $request)
     {
         $request->validate(
@@ -54,19 +76,43 @@ class UserController extends Controller
         $password = $request->input('password');
         $number_phone = $request->input('number_phone');
         $address = $request->input('address');
-        if($request->hasFile('picture')){
-            $file = $request->file('picture');
-            $name_pic = $file->getClientOriginalName();
-            $random_pic = Str::random(4);
-            $Hinh = $random_pic."_".$name_pic;
-            while (file_exists("templates/pictureuser/".$Hinh)) {
-                $Hinh =  $random_pic."_".$name_pic;
-            }
-            $file->move('templates/pictureuser',$Hinh);
-            $picture = $Hinh;
-        } else {
-            $picture = "";
-        }
+
+        $file_src = $request->file('picture');
+        $is_file_upload = Storage::disk('dropbox')->put('img-api', $file_src);
+        $picture = Storage::disk('dropbox')->url($is_file_upload);
+        // $file = $request->file('picture');
+        // $name_pic = $file->getClientOriginalName();
+        // return $name_pic;
+        // if($request->hasFile('picture')){
+        //     $file = $request->file('picture');
+        //     $name_pic = $file->getClientOriginalName();
+        //     $random_pic = Str::random(4);
+        //     $Hinh = $random_pic."_".$name_pic;
+
+        //     // $Hinh = $name_pic;
+        //     while (file_exists("templates/pictureuser/".$Hinh)) {
+        //         $Hinh =  $random_pic."_".$name_pic;
+        //     }
+        //     $file->move('templates/pictureuser',$Hinh);
+        //     $picture = $Hinh;
+        // } else {
+        //     $picture = "";
+        // }
+        // $random_pic = Str::random(4);
+        // $picture =$random_pic."_".$request->input('picture');
+        //$path = $request->file('picture')->store('avatars');
+        // $path = Storage::putFile('avatars', $request->file('picture'));
+
+        // $picture = $request->file('picture');
+        // Storage::put($request, 'avatars');
+        // $file = $request->input('picture');
+        // $random_pic = Str::random(4);
+        // $Hinh = $random_pic."_".$file;
+        // while (file_exists("templates/pictureuser/".$Hinh)) {
+        //     $Hinh =  $random_pic."_".$name_pic;
+        // }
+        // $file->move('templates/pictureuser',$Hinh);
+        // $picture = $Hinh;
         $user = new User([
             'name' => $name,
             'email' => $email,
